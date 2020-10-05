@@ -1,0 +1,8 @@
+@import '../../styles/Variables.scss';
+
+.header {
+    &__section {
+        background-color: $background-darken;
+        min-height: 100px;
+    }
+}

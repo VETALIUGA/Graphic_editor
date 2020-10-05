@@ -1,0 +1,8 @@
+@import '../../styles/Variables.scss';
+
+.tools-sidebar {
+    &__section {
+        background-color: $background-dark-gray;
+        height: 100%;
+    }
+}
