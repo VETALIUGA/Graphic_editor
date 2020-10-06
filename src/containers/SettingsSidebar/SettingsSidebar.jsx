@@ -1,10 +1,10 @@
 import React from 'react'
 import './SettingsSidebar.scss'
 
-const SettingsSidebar = ({brightness}) => {
+const SettingsSidebar = (props) => {
     return (
         <section className="settings-sidebar__section">
-            {brightness}
+            {props.children}
         </section>
     )
 }
