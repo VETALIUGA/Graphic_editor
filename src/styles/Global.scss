@@ -26,6 +26,17 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
+label {
+    display: block;
+}
+
+input {
+    font-variant-numeric: lining-nums;
+    &:focus {
+        outline: none;
+    }
+}
+
 .container {
     padding-top: 2rem;
     max-width: 1000px;
@@ -67,4 +78,39 @@ h1 {
         // display: block;
         // display: none;
     // }
+}
+
+.text {
+    &--lg {
+        font-weight: 500;
+        font-size: 18px;
+    }
+    &--xmd {
+        font-weight: 500;
+        font-size: 16px;
+    }
+    &--md {
+        font-weight: 500;
+        font-size: 14px;
+    }
+    &--sm {
+        font-weight: 500;
+        font-size: 12px;
+    }
+    &--xsm {
+        font-weight: 500;
+        font-size: 10px;
+    }
+}
+
+.icon {
+    &--lg {
+
+    }
+    &--md {
+
+    }
+    &--sm {
+        font-size: 20px;
+    }
 }

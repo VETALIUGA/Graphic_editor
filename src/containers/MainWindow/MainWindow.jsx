@@ -40,7 +40,7 @@ const MainWindow = ({ settingValues, setColorCorrection }) => {
                 />
             </main>
             <div className="main-window--right-sidebar">
-                <SettingsSidebar>
+                <SettingsSidebar title='Налаштування фотокорекції'>
                     <ColorSettings
                         inputHandler={inputHandler}
                         colorSettings={colorSettings}

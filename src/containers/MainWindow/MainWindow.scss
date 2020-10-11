@@ -4,7 +4,7 @@
     background-color: $background-main;
     min-height: 100vh;
     display: grid;
-    grid-template-rows: 100px auto;
+    grid-template-rows: 80px auto;
     grid-template-columns: 100px auto 300px;
     &--header {
         grid-column: span 3;

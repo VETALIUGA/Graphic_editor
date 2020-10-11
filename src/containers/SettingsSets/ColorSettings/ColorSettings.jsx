@@ -9,11 +9,11 @@ const ColorSettings = (props) => {
     const {colorSettings:{blur, brightness, saturation}, inputHandler} = props
     
     return (
-        <>
-            <InputRange name="blur" inputHandler={inputHandler} range={{ min: '0', max: '10' }} value={blur} />
-            <InputRange name="brightness" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={brightness} />
-            <InputRange name="saturation" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={saturation} />
-        </>
+        <div className="color-settings">
+            <InputRange title='блюр' name="blur" inputHandler={inputHandler} range={{ min: '0', max: '10' }} value={blur} />
+            <InputRange title='яскравість' name="brightness" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={brightness} />
+            <InputRange title='насиченість' name="saturation" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={saturation} />
+        </div>
     )
 }
 
