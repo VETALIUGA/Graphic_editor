@@ -1,6 +1,6 @@
 @import "../../../styles/Variables.scss";
 
-input[type='number']::-webkit-outer-spin-button,
+input[type="number"]::-webkit-outer-spin-button,
 ::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -21,17 +21,26 @@ input[type='number']::-webkit-outer-spin-button,
     }
     &__value {
         color: $font-light;
+
         &-wrap {
+            display: flex;
+            justify-content: flex-end;
             border-radius: 3px;
             border: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
-            padding: 5px 10px 4px;
+            padding: 5px 10px 4px 10px;
+            transition: border-color 0.1s;
+            &:focus-within {
+                border-color: $background-light;
+            }
         }
         &-input {
+            
             color: $font-light;
             background-color: transparent;
-            border: none;
             text-align: end;
+            border: none;
             margin-right: 2px;
+            
         }
     }
     &__input {

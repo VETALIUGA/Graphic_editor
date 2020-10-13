@@ -1,32 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux';
-import InputRange from '../../../components/Inputs/InputRange/InputRange'
-import useDebounce from '../../../Hooks/useDebounce';
-import { setBrightnessValue, setColorCorrectionValues } from '../../../redux/actions/actions';
+import React, { useRef, useState } from 'react'
 import './ColorSettings.scss'
 
+import InputRange from '../../../components/Inputs/InputRange/InputRange'
+import PresetItem from './PresetItem'
+import { connect } from 'react-redux'
+import { setActivePreset } from '../../../redux/actions/actions'
+
 const ColorSettings = (props) => {
-    const {colorSettings:{blur, brightness, saturation}, inputHandler} = props
-    
+    const { colorSettings: { blur, brightness, saturation, color }, inputHandler, originalImage, presetHandler, presets, activePreset, setActivePreset } = props
     return (
-        <div className="color-settings">
-            <InputRange title='блюр' name="blur" inputHandler={inputHandler} range={{ min: '0', max: '10' }} value={blur} />
-            <InputRange title='яскравість' name="brightness" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={brightness} />
-            <InputRange title='насиченість' name="saturation" inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={saturation} />
-        </div>
+        <>
+            <div className="color-settings">
+                <InputRange title='блюр' name="blur" dimension='px' inputHandler={inputHandler} range={{ min: '0', max: '10' }} value={blur} />
+                <InputRange title='яскравість' name="brightness" dimension='%' inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={brightness} />
+                <InputRange title='насиченість' name="saturation" dimension='%' inputHandler={inputHandler} range={{ min: '0', max: '200' }} value={saturation} />
+                <InputRange title='гама' name="color" dimension='deg' inputHandler={inputHandler} range={{ min: '0', max: '360' }} value={color} />
+            </div>
+            <div className="color-settings__presets">
+                {presets.map((item, index) => {
+                    return (
+                        <PresetItem
+                            id={index}
+                            params={item}
+                            originalImage={originalImage}
+                            key={index}
+                            active={activePreset === index}
+                            presetHandler={presetHandler}
+                            setActiveId={setActivePreset}
+                        />
+                    )
+                })}
+
+            </div>
+        </>
     )
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setBrightness: value => dispatch(setBrightnessValue(value)),
-        setColorCorrection: values => dispatch(setColorCorrectionValues(values))
+        setActivePreset: id => dispatch(setActivePreset(id))
     }
 }
 
 const mapStateToProps = (state) => {
-    // const { brightness } = state.color;
-    return { ...state.color}
+    const { settingValues } = state.color
+    const { presets, activePreset } = state.preset
+    return { settingValues, presets, activePreset }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColorSettings);

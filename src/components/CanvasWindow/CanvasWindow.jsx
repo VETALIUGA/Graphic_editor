@@ -2,49 +2,36 @@ import React, { useEffect, useRef, useState } from 'react'
 import imageForEdit from '@/assets/test-photo.jpg'
 
 const CanvasWindow = (props) => {
-    const { blur, brightness, saturation } = props.colorSettings;
+    const { blur, brightness, saturation, color } = props.colorSettings
 
-    const isFirstRender = useRef(true);
-    const canvasRef = useRef(null);
-    const [link, setLink] = useState('#');
+    const isFirstRender = useRef(true)
+    const canvasRef = useRef(null)
+    const [link, setLink] = useState('#')
 
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        const image = new Image();
-        image.src = imageForEdit;
+        const canvas = canvasRef.current
+        const ctx = canvas.getContext('2d')
+        const image = new Image()
+        image.src = imageForEdit
 
         if (isFirstRender.current) {
-            isFirstRender.current = false;
-            image.onload = function () {
-                canvas.height = image.height;
-                canvas.width = image.width;
-                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-                
-                // setLink(canvasRef.current.toDataURL('image/png'))
+            isFirstRender.current = false
+            image.onload = () => {
+                canvas.height = image.height
+                canvas.width = image.width
+                ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px) hue-rotate(${color}deg)`
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
             }
         } else {
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            // setLink(canvasRef.current.toDataURL('image/png'))
+            ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px) hue-rotate(${color}deg)`
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
         }
-        
 
         
-        // setTimeout(() => {
-        //     const img = canvasRef.current.toDataURL('image/png');
-        //     const imgNode = document.createElement('img')
-        //     imgNode.src = img;
-        //     document.body.appendChild(imgNode)
-        // }, 2000)
-
-
-
-
-
-        ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)`;
         return () => ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }, [blur, brightness, saturation, canvasRef])
+    }, [blur, brightness, saturation, color, canvasRef])
+
     const downloadHandler = () => {
         setLink(canvasRef.current.toDataURL('image/png'))
     }

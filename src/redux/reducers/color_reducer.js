@@ -4,7 +4,8 @@ const initialState = {
   settingValues: {
     blur: 0,
     saturation: 100,
-    brightness: 100
+    brightness: 100,
+    color: 0
   }
 }
 
