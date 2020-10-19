@@ -11,6 +11,8 @@ import SettingsSidebar from '../SettingsSidebar/SettingsSidebar';
 import ToolsSidebar from '../ToolsSidebar/ToolsSidebar';
 import ColorSettings from '../SettingsSets/ColorSettings/ColorSettings'
 import CanvasWindow from '../../components/CanvasWindow/CanvasWindow';
+import { Route, Switch } from 'react-router-dom';
+import CropSettings from '../SettingsSets/CropSettings/CropSettings';
 
 const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setActivePreset }) => {
     const [colorSettings, setColorSettings] = useState({
@@ -43,7 +45,7 @@ const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setAct
             ...colorSettings
         })
     }
-    
+
     return (
         <div className="main-window">
             <div className="main-window--header">
@@ -58,14 +60,25 @@ const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setAct
                 />
             </main>
             <div className="main-window--right-sidebar">
-                <SettingsSidebar title='Налаштування фотокорекції'>
-                    <ColorSettings
-                        presetHandler={presetHandler}
-                        inputHandler={inputHandler}
-                        colorSettings={colorSettings}
-                        originalImage={imageForEdit}
-                    />
-                </SettingsSidebar>
+
+                <Switch>
+                    <Route exact path="/color">
+                        <SettingsSidebar title='Налаштування фотокорекції'>
+                            <ColorSettings
+                                presetHandler={presetHandler}
+                                inputHandler={inputHandler}
+                                colorSettings={colorSettings}
+                                originalImage={imageForEdit}
+                            />
+                        </SettingsSidebar>
+                    </Route>
+                    <Route exact path="/crop">
+                        <SettingsSidebar title='Обрізання зображення'>
+                            <CropSettings />
+                        </SettingsSidebar>
+                    </Route>
+                </Switch>
+
             </div>
         </div>
     )

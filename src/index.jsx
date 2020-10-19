@@ -6,6 +6,9 @@ import './babel.js';
 import imageForEdit from '@/assets/test-photo.jpg';
 import MainWindow from './containers/MainWindow/MainWindow';
 import { store } from './redux/store';
+import {
+    BrowserRouter as Router,
+  } from "react-router-dom";
 
 const App = () => {
     // const isFirst = useRef(true);
@@ -79,4 +82,4 @@ const App = () => {
     )
 };
 
-render(<Provider store={store}><App /></Provider>, document.getElementById('app'));
+render(<Provider store={store}><Router><App /></Router></Provider>, document.getElementById('app'));

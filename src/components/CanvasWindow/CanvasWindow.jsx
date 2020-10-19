@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import imageForEdit from '@/assets/test-photo.jpg'
+import ReactCrop from 'react-image-crop'
 
 const CanvasWindow = (props) => {
     const { blur, brightness, saturation, color } = props.colorSettings
@@ -28,12 +29,12 @@ const CanvasWindow = (props) => {
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
         }
 
-        
+
         return () => ctx.clearRect(0, 0, canvas.width, canvas.height);
     }, [blur, brightness, saturation, color, canvasRef])
 
     const downloadHandler = () => {
-        setLink(canvasRef.current.toDataURL('image/png'))
+        setLink(canvasRef.current.toDataURL('image/png', 1))
     }
 
     return (
@@ -47,7 +48,7 @@ const CanvasWindow = (props) => {
                         className="canvas"
                     ></canvas>
                 </div>
-                <a download="myImage.png" onClick={downloadHandler} href={link} className="link">Завантажити на компік</a>
+                <a download="myImage" onClick={downloadHandler} href={link} className="link text--md">Завантажити на компік</a>
             </div>
         </section>
     )

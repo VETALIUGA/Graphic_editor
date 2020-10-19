@@ -106,8 +106,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
-        main: ['@babel/polyfill', './index.jsx'],
-        analytics: './analytics.ts'
+        main: ['@babel/polyfill', './index.jsx']
     },
     output: {
         filename: filename('js'),
@@ -124,6 +123,7 @@ module.exports = {
     },
     optimization: optimization(),
     devServer: {
+        historyApiFallback: true,
         port: '4200',
         hot: isDev
     },

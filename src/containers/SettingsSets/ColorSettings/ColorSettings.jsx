@@ -17,6 +17,8 @@ const ColorSettings = (props) => {
                 <InputRange title='гама' name="color" dimension='deg' inputHandler={inputHandler} range={{ min: '0', max: '360' }} value={color} />
             </div>
             <div className="color-settings__presets">
+            <span className="color-settings__title text--sm">Готові темплейти</span>
+                <div className="color-settings__grid">
                 {presets.map((item, index) => {
                     return (
                         <PresetItem
@@ -30,6 +32,7 @@ const ColorSettings = (props) => {
                         />
                     )
                 })}
+                </div>
 
             </div>
         </>

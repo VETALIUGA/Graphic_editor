@@ -1,4 +1,4 @@
-import { SET_INITIAL_IMAGE } from "../actions/actionTypes";
+import { SET_INITIAL_IMAGE, SET_MODIFIED_IMAGE } from "../actions/actionTypes";
 
 const initialState = {
     links: {
@@ -12,7 +12,23 @@ export default function (state = initialState, action) {
         case SET_INITIAL_IMAGE: {
             return {
                 ...state,
-                original: action.payload
+                links: {
+                    ...state.links,
+                    original: action.payload
+                }
+                    
+                
+            }
+        }
+        case SET_MODIFIED_IMAGE: {
+            return {
+                ...state,
+                links: {
+                    ...state.links,
+                    modified: action.payload
+                }
+                    
+                
             }
         }
         default:
