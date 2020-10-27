@@ -4,5 +4,8 @@
     &__section {
         background-color: $background-darken;
         min-height: 80px;
+        display: flex;
+        align-items: center;
+        padding: 5px 20px;
     }
 }

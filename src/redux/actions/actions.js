@@ -1,4 +1,4 @@
-import { SET_ACTIVE_PRESET, SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_INITIAL_IMAGE, SET_SATURATION_VALUE } from "./actionTypes"
+import { SET_ACTIVE_PRESET, SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_INITIAL_IMAGE, SET_MEDIAN_FILTER_VALUE, SET_MODIFIED_IMAGE, SET_SATURATION_VALUE } from "./actionTypes"
 
 export const setBrightnessValue = (value) => {
     return {
@@ -37,11 +37,27 @@ export const setInitialImage = (file) => {
     }
 }
 
+export const setModifiedImage = (file) => {
+    return {
+        type: SET_MODIFIED_IMAGE,
+        payload: file
+    }
+}
+
 ////////////////////////////
 
 export const setActivePreset = (id) => {
     return {
         type: SET_ACTIVE_PRESET,
         payload: id
+    }
+}
+
+///////////////////////////
+
+export const setMedianValue = (value) => {
+    return {
+        type: SET_MEDIAN_FILTER_VALUE,
+        payload: value
     }
 }

@@ -13,8 +13,12 @@ import ColorSettings from '../SettingsSets/ColorSettings/ColorSettings'
 import CanvasWindow from '../../components/CanvasWindow/CanvasWindow';
 import { Route, Switch } from 'react-router-dom';
 import CropSettings from '../SettingsSets/CropSettings/CropSettings';
+import RecoverySettings from '../SettingsSets/RecoverySettings/RecoverySettings';
+import ColorSettingsCC from '../CanvasControllers/ColorSettingsCC/ColorSettingsCC';
+import UploadSettings from '../SettingsSets/UploadSettings/UploadSettings';
+import RecoverySettingsCC from '../CanvasControllers/RecoverySettingsCC/RecoverySettingsCC';
 
-const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setActivePreset }) => {
+const MainWindow = ({ settingValues, original, setColorCorrection, setInitialImage, setActivePreset }) => {
     const [colorSettings, setColorSettings] = useState({
         ...settingValues
     })
@@ -22,8 +26,11 @@ const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setAct
     const debouncedColorSettings = useDebounce(colorSettings, 100)
 
     useEffect(() => {
-        console.log(imageForEdit);
-        setInitialImage(imageForEdit)
+        const setImage = async () => {
+            console.log(imageForEdit);
+            await setInitialImage(imageForEdit)
+        }
+        setImage()
     }, [imageForEdit])
 
     useEffect(() => {
@@ -55,13 +62,26 @@ const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setAct
                 <ToolsSidebar />
             </div>
             <main className="main-window--main">
-                <CanvasWindow
-                    colorSettings={colorSettings}
-                />
+                <Switch>
+                    <Route exact path="/">
+                        {original ? <CanvasWindow
+                            colorSettings={colorSettings} /> : 'Loading...'}
+                    </Route>
+                    <Route exact path="/color">
+                        {original ? <ColorSettingsCC /> : 'Loading...'}
+                    </Route>
+                    <Route exact path="/recovery">
+                        {original ? <RecoverySettingsCC /> : 'Loading...'}
+                    </Route>
+                </Switch>
             </main>
             <div className="main-window--right-sidebar">
-
                 <Switch>
+                    <Route exact path="/">
+                        <SettingsSidebar title='Завантажити зображення'>
+                            <UploadSettings />
+                        </SettingsSidebar>
+                    </Route>
                     <Route exact path="/color">
                         <SettingsSidebar title='Налаштування фотокорекції'>
                             <ColorSettings
@@ -75,6 +95,11 @@ const MainWindow = ({ settingValues, setColorCorrection, setInitialImage, setAct
                     <Route exact path="/crop">
                         <SettingsSidebar title='Обрізання зображення'>
                             <CropSettings />
+                        </SettingsSidebar>
+                    </Route>
+                    <Route exact path="/recovery">
+                        <SettingsSidebar title='Відновлення зображення'>
+                            <RecoverySettings />
                         </SettingsSidebar>
                     </Route>
                 </Switch>
@@ -94,7 +119,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state) => {
     const { settingValues } = state.color
-    return { settingValues }
+    const { original } = state.file.links
+    return { settingValues, original }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainWindow);
