@@ -1,0 +1,17 @@
+@import "../../../../styles/Variables.scss";
+
+.input-text {
+    // border-radius: 3px;
+    border: none;
+    border-bottom: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
+    background-color: transparent;
+    // padding: 5px 10px 4px 10px;
+    color: $font-white;
+    font-weight: 600;
+    width: 100%;
+    max-width: 150px;
+    transition: border-color .1s;
+    &:disabled {
+        border-color: transparent;
+    }
+}

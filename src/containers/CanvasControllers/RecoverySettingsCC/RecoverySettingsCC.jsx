@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setModifiedImage } from '../../../redux/actions/actions';
 
-const RecoverySettingsCC = ({ original, median, setModifiedImage }) => {
+const RecoverySettingsCC = ({ original, modified, median, setModifiedImage }) => {
     const canvasRef = useRef(null)
 
     useEffect(() => {
         console.log(original);
         const image = new Image()
-        image.src = original
+        image.src = modified || original
         image.onload = async () => {
             console.log('loaded');
             let src = await cv.imread(image);
@@ -22,7 +22,7 @@ const RecoverySettingsCC = ({ original, median, setModifiedImage }) => {
             await src.delete(); dst.delete();
             console.log('finished');
         }
-        return () => {setModifiedImage(canvasRef.current.toDataURL('image/png', 1))}
+        return () => { setModifiedImage(canvasRef.current.toDataURL('image/png', 1)) }
     }, [median])
     return (
         <section className="section canvas__section">
@@ -36,10 +36,11 @@ const RecoverySettingsCC = ({ original, median, setModifiedImage }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { file: { links: { original } } } = state
+    const { file: { links: { original, modified } } } = state
     const { recovery: { filters: { median } } } = state
     return {
         original,
+        modified,
         median
     }
 }

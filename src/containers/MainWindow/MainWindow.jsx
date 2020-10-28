@@ -62,7 +62,9 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                 <ToolsSidebar />
             </div>
             <main className="main-window--main">
-                <Switch>
+                {original ? <CanvasWindow
+                    colorSettings={colorSettings} /> : 'Loading...'}
+                {/* <Switch>
                     <Route exact path="/">
                         {original ? <CanvasWindow
                             colorSettings={colorSettings} /> : 'Loading...'}
@@ -73,7 +75,7 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                     <Route exact path="/recovery">
                         {original ? <RecoverySettingsCC /> : 'Loading...'}
                     </Route>
-                </Switch>
+                </Switch> */}
             </main>
             <div className="main-window--right-sidebar">
                 <Switch>

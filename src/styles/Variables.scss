@@ -10,6 +10,7 @@ $background-white: #FFFFFF;
 
 $font-light: #BEBEC0;
 $font-light-gray: #868697;
+$font-white: #FFFFFF;
 
 @mixin input-range-shadow {
     box-shadow: 0 0 10px 2px rgba($color: #000000, $alpha: .25);

@@ -13,14 +13,21 @@ const RecoverySettings = ({ onSetMedianValue, filters }) => {
         onSetMedianValue(filterSettings.median)
     }, [debouncedFilterSettings])
 
+    const inputHandler = (value) => {
+        setFilterSettings({
+            ...filterSettings,
+            median: value
+        })
+    }
+
     return (
         <div>
-            <InputRange title='Медіанна фільтрація' name="medianFilter" dimension='x' inputHandler={(e) => { onSetMedianValue(e.target.value) }} range={{ min: '1', max: '5', step: '2' }} value={filters.median} />
+            <InputRange title='Медіанна фільтрація' name="medianFilter" dimension='x' inputHandler={(e) => { inputHandler(e.target.value) }} range={{ min: '1', max: '5', step: '2' }} value={filters.median} />
         </div>
     )
 }
 
-const mapStateToProps = ({ recovery: { filters} }) => {
+const mapStateToProps = ({ recovery: { filters } }) => {
     return {
         filters
     }
