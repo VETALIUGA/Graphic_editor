@@ -2,7 +2,7 @@
 
 .main-window {
     background-color: $background-main;
-    min-height: 100vh;
+    height: 100vh;
     display: grid;
     grid-template-rows: 80px auto;
     grid-template-columns: 100px auto 300px;
@@ -12,8 +12,29 @@
     &--left-sidebar {
         grid-column: span 1;
     }
+    &--right-sidebar {
+        max-height: 100vh;
+    }
     &--main {
         grid-column: span 1;
         align-self: center;
+    }
+    &__blank {
+        width: 100%;
+        max-width: 40vw;
+        margin: 0 auto;
+        min-height: 60vh;
+        border-radius: 3px;
+        border: 2px dashed $background-gray;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: $font-light-gray;
+        &-text {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
     }
 }

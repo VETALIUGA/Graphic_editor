@@ -1,0 +1,61 @@
+@import "../../../styles/Variables.scss";
+
+.input-buttons {
+    margin-bottom: 20px;
+    &__wrap {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        border-radius: 3px;
+        border: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
+    }
+    &__label {
+        color: $font-light;
+        text-transform: uppercase;
+    }
+    &__spinner {
+        color: $font-light;
+        margin-left: 5px;
+    }
+    &__button {
+        font-weight: 400;
+        color: $font-light;
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: $background-dark-gray;
+        display: block;
+        flex: 1 1 50px;
+        border-radius: 0;
+        border: none;
+        border-right: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
+        transition: background-color .1s box-shadow .1s;
+        &:first-child {
+            border-radius: 3px 0 0 3px;
+        }
+        &:last-child {
+            border-right: none;
+            border-radius: 0 3px 3px 0 ;
+        }
+        &:hover {
+            background-color: $background-colored;
+        }
+        
+        &.active {
+            background-color: $background-colored-alter;
+            color: $font-dark;
+            box-shadow: 0 0 0 3px rgba($color: $background-colored-alter, $alpha: 0.3);
+            z-index: 10;
+            cursor: initial;
+            &:disabled {
+                background-color: $background-colored-alter;
+                color: $font-dark;
+                cursor: initial;
+            }
+        }
+        &:disabled {
+            color: $font-light-gray;
+            background-color: $background-dark-gray;
+            cursor: not-allowed;
+        }
+    }
+}

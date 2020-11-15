@@ -10,7 +10,9 @@ const SettingsSidebar = ({ title, children }) => {
                 <FontAwesomeIcon icon={faSlidersH} className="settings-sidebar__icon icon--sm" />
                 <h3 className="settings-sidebar__article text--xmd">{title}</h3>
             </div>
-            {children}
+            <div className="settings-sidebar__children">
+                {children}
+            </div>
         </section>
     )
 }

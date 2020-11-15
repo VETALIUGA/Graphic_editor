@@ -2,23 +2,37 @@ import React, { useState } from 'react'
 import Logo from '@/assets/Logo.svg'
 import './Header.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faEdit } from '@fortawesome/free-solid-svg-icons'
-import { InputText } from '../../components/Inputs/InputRange/InputText/InputText'
+import { faCheck, faEdit, faFileDownload } from '@fortawesome/free-solid-svg-icons'
+import { InputText } from '../../components/Inputs/InputText/InputText'
 import { connect } from 'react-redux'
+import { setNewName } from '../../redux/actions/actions'
 
 const Header = (props) => {
     const [isEdit, setIsEdit] = useState(false)
+    const [value, setValue] = useState(props.fileName)
     const buttonHandler = () => {
-        setIsEdit(!isEdit)
-        
+        if (isEdit) {
+            setIsEdit(!isEdit)
+            props.setNewName(value)
+        } else {
+            setIsEdit(!isEdit)
+        }
     }
 
     return (
         <header className="section header__section">
-            <img className="header__logo" src={Logo} alt=""/>
-            <div className="header__edit">
-            <InputText defaultValue = 'Image' disabled={!isEdit} inputHandler={(e)=> console.log(e.target.value)}/>
-            <button className="header__edit-button" onClick = {buttonHandler}><FontAwesomeIcon className="icon--xsm" icon={isEdit ? faCheck : faEdit}/></button>
+            <div className="header__item">
+                <img className="header__logo" src={Logo} alt="" />
+                <div className="header__edit">
+                    <InputText defaultValue={value} disabled={!isEdit} inputHandler={(e) => setValue(e.target.value)} />
+                    <button className="header__edit-button" onClick={buttonHandler}><FontAwesomeIcon className="icon--xsm" icon={isEdit ? faCheck : faEdit} /></button>
+                </div>
+            </div>
+            <div className="header__item">
+                <a href="#" className="header__link link">
+                    <FontAwesomeIcon className="header__link-icon icon--xsm" icon={faFileDownload} />
+                    <span className="header__link-text text--md">Зберегти</span>
+                </a>
             </div>
         </header>
     )
@@ -26,13 +40,12 @@ const Header = (props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        
+        setNewName: (name) => dispatch(setNewName(name))
     }
 }
 
-const mapStateToProps = (state) => {
-    const { original } = state.file.links
-    return { original }
+const mapStateToProps = ({ file: { fileName } }) => {
+    return { fileName }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

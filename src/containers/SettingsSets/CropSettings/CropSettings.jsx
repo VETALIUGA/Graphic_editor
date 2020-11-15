@@ -7,6 +7,9 @@ const CropSettings = (props) => {
     const [crop, setCrop] = useState();
     return (
         <div>
+            <pre>
+            {JSON.stringify(crop, null, 2)}
+            </pre>
             <ReactCrop src={props.original} crop={crop} onChange={newCrop => setCrop(newCrop)}/>
         </div>
     )

@@ -1,4 +1,4 @@
-import { SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_SATURATION_VALUE } from "../actions/actionTypes";
+import { RESET_COLOR_CORRECTION, SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_SATURATION_VALUE } from "../actions/actionTypes";
 
 const initialState = {
   settingValues: {
@@ -34,6 +34,12 @@ export default function (state = initialState, action) {
         ...state,
         settingValues: {...action.payload}
       };
+    }
+    case RESET_COLOR_CORRECTION: {
+      return {
+        ...state,
+        ...initialState
+      }
     }
     default:
       return state;

@@ -40,6 +40,7 @@ input {
 }
 
 button {
+    font-variant-numeric: lining-nums;
     outline: none;
 }
 
@@ -61,17 +62,6 @@ h1 {
     height: 250px;
     width: 250px;
     margin: 0 auto;
-}
-
-.canvas {
-    width: 100%;
-    
-    &__wrap {
-        position: relative;
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-    }
 }
 
 .link {
@@ -111,5 +101,8 @@ h1 {
     }
     &--sm {
         font-size: 20px;
+    }
+    &--xsm{
+        font-size: 14px;
     }
 }

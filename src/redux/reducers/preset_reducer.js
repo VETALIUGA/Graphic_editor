@@ -4,10 +4,10 @@ const initialState = {
     activePreset: null,
     presets: [
         {
-            blur: 0,
-            brightness: 170,
+            blur: 1,
+            brightness: 80,
             saturation: 110,
-            color: 17
+            color: 122
         },
         {
             blur: 3,

@@ -6,7 +6,11 @@
         min-height: 80px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 5px 20px;
+    }
+    &__item {
+        display: flex;
     }
     &__edit {
         margin-left: 20px;
@@ -26,6 +30,16 @@
             &:hover {
                 border-color: $background-light;
             }
+        }
+    }
+    &__link {
+        display: block;
+        background-color: $background-colored-alter;
+        border-radius: 3px;
+        padding: 10px 20px;
+        color: $font-dark;
+        &-icon {
+            margin-right: 10px;
         }
     }
 }

@@ -10,13 +10,14 @@ import Header from '../Header/Header';
 import SettingsSidebar from '../SettingsSidebar/SettingsSidebar';
 import ToolsSidebar from '../ToolsSidebar/ToolsSidebar';
 import ColorSettings from '../SettingsSets/ColorSettings/ColorSettings'
-import CanvasWindow from '../../components/CanvasWindow/CanvasWindow';
+import CanvasWindow from '../../containers/CanvasWindow/CanvasWindow';
 import { Route, Switch } from 'react-router-dom';
 import CropSettings from '../SettingsSets/CropSettings/CropSettings';
 import RecoverySettings from '../SettingsSets/RecoverySettings/RecoverySettings';
-import ColorSettingsCC from '../CanvasControllers/ColorSettingsCC/ColorSettingsCC';
 import UploadSettings from '../SettingsSets/UploadSettings/UploadSettings';
-import RecoverySettingsCC from '../CanvasControllers/RecoverySettingsCC/RecoverySettingsCC';
+import { CompressSettings } from '../SettingsSets/CompressSettings/CompressSettings';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const MainWindow = ({ settingValues, original, setColorCorrection, setInitialImage, setActivePreset }) => {
     const [colorSettings, setColorSettings] = useState({
@@ -28,7 +29,7 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
     useEffect(() => {
         const setImage = async () => {
             console.log(imageForEdit);
-            await setInitialImage(imageForEdit)
+            // await setInitialImage(imageForEdit)
         }
         setImage()
     }, [imageForEdit])
@@ -59,11 +60,17 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                 <Header />
             </div>
             <div className="main-window--left-sidebar">
-                <ToolsSidebar />
+                <ToolsSidebar disabled={!original} />
             </div>
             <main className="main-window--main">
                 {original ? <CanvasWindow
-                    colorSettings={colorSettings} /> : 'Loading...'}
+                    colorSettings={colorSettings} />
+                    :
+                    <div className="main-window__blank">
+                        <FontAwesomeIcon className="icon--md" icon={faUpload} />
+                        <span className="main-window__blank-text text--lg">Оберіть зображення для початку редагування</span>
+                    </div>
+                }
                 {/* <Switch>
                     <Route exact path="/">
                         {original ? <CanvasWindow
@@ -90,7 +97,7 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                                 presetHandler={presetHandler}
                                 inputHandler={inputHandler}
                                 colorSettings={colorSettings}
-                                originalImage={imageForEdit}
+                                originalImage={original}
                             />
                         </SettingsSidebar>
                     </Route>
@@ -102,6 +109,11 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                     <Route exact path="/recovery">
                         <SettingsSidebar title='Відновлення зображення'>
                             <RecoverySettings />
+                        </SettingsSidebar>
+                    </Route>
+                    <Route exact path="/compress">
+                        <SettingsSidebar title='Оптимізація зображення'>
+                            <CompressSettings />
                         </SettingsSidebar>
                     </Route>
                 </Switch>
