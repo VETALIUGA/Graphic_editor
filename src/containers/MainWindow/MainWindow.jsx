@@ -11,7 +11,7 @@ import SettingsSidebar from '../SettingsSidebar/SettingsSidebar';
 import ToolsSidebar from '../ToolsSidebar/ToolsSidebar';
 import ColorSettings from '../SettingsSets/ColorSettings/ColorSettings'
 import CanvasWindow from '../../containers/CanvasWindow/CanvasWindow';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import CropSettings from '../SettingsSets/CropSettings/CropSettings';
 import RecoverySettings from '../SettingsSets/RecoverySettings/RecoverySettings';
 import UploadSettings from '../SettingsSets/UploadSettings/UploadSettings';
@@ -71,18 +71,6 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                         <span className="main-window__blank-text text--lg">Оберіть зображення для початку редагування</span>
                     </div>
                 }
-                {/* <Switch>
-                    <Route exact path="/">
-                        {original ? <CanvasWindow
-                            colorSettings={colorSettings} /> : 'Loading...'}
-                    </Route>
-                    <Route exact path="/color">
-                        {original ? <ColorSettingsCC /> : 'Loading...'}
-                    </Route>
-                    <Route exact path="/recovery">
-                        {original ? <RecoverySettingsCC /> : 'Loading...'}
-                    </Route>
-                </Switch> */}
             </main>
             <div className="main-window--right-sidebar">
                 <Switch>
@@ -92,6 +80,7 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                         </SettingsSidebar>
                     </Route>
                     <Route exact path="/color">
+                        {!original && <Redirect to="/" />}
                         <SettingsSidebar title='Налаштування фотокорекції'>
                             <ColorSettings
                                 presetHandler={presetHandler}
@@ -102,16 +91,19 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                         </SettingsSidebar>
                     </Route>
                     <Route exact path="/crop">
+                        {!original && <Redirect to="/" />}
                         <SettingsSidebar title='Обрізання зображення'>
                             <CropSettings />
                         </SettingsSidebar>
                     </Route>
                     <Route exact path="/recovery">
+                        {!original && <Redirect to="/" />}
                         <SettingsSidebar title='Відновлення зображення'>
                             <RecoverySettings />
                         </SettingsSidebar>
                     </Route>
                     <Route exact path="/compress">
+                        {!original && <Redirect to="/" />}
                         <SettingsSidebar title='Оптимізація зображення'>
                             <CompressSettings />
                         </SettingsSidebar>
