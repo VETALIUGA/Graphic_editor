@@ -1,10 +1,18 @@
-@import '../../styles/Variables.scss';
+@import "../../styles/Variables.scss";
+
+.blank {
+    &__section {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+}
 
 .main-window {
     background-color: $background-main;
     height: 100vh;
     display: grid;
-    grid-template-rows: 80px auto;
+    grid-template-rows: 80px calc(100vh - 80px);
     grid-template-columns: 100px auto 300px;
     &--header {
         grid-column: span 3;
@@ -17,7 +25,6 @@
     }
     &--main {
         grid-column: span 1;
-        align-self: center;
     }
     &__blank {
         width: 100%;

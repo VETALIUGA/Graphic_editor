@@ -66,10 +66,12 @@ const MainWindow = ({ settingValues, original, setColorCorrection, setInitialIma
                 {original ? <CanvasWindow
                     colorSettings={colorSettings} />
                     :
-                    <div className="main-window__blank">
-                        <FontAwesomeIcon className="icon--md" icon={faUpload} />
-                        <span className="main-window__blank-text text--lg">Оберіть зображення для початку редагування</span>
-                    </div>
+                    <section className="section blank__section">
+                        <div className="main-window__blank">
+                            <FontAwesomeIcon className="icon--md" icon={faUpload} />
+                            <span className="main-window__blank-text text--lg">Оберіть зображення для початку редагування</span>
+                        </div>
+                    </section>
                 }
             </main>
             <div className="main-window--right-sidebar">

@@ -2,7 +2,7 @@ import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { resetColorCorrectionValues, resetRecoveryFilters, setActivePreset, setInitialImage } from '../../../redux/actions/actions';
+import { resetActivePreset, resetColorCorrectionValues, resetRecoveryFilters, setActivePreset, setInitialImage } from '../../../redux/actions/actions';
 
 import './UploadSettings.scss';
 
@@ -13,7 +13,7 @@ const images = [
     '/src/assets/examples/parrot.jpg'
 ]
 
-const UploadSettings = ({ setInitialImage, resetRecoveryFilters, resetColorCorrectionValues, original }) => {
+const UploadSettings = ({ setInitialImage, resetRecoveryFilters, resetColorCorrectionValues, resetActivePreset, original }) => {
     const [activeImg, setActiveImg] = useState(null)
     const [fileName, setFileName] = useState('Оберіть зображення у форматі png, jpeg, webp')
     const [isDrag, setIsDrag] = useState(false)
@@ -26,7 +26,8 @@ const UploadSettings = ({ setInitialImage, resetRecoveryFilters, resetColorCorre
             setFileName(pathArr[pathArr.length - 1])
             setIsDrag(false)
             setActiveImg(null)
-            
+            resetActivePreset()
+
         }
     }
 
@@ -37,7 +38,7 @@ const UploadSettings = ({ setInitialImage, resetRecoveryFilters, resetColorCorre
             setInitialImage(e.target.src)
             setActiveImg(index)
             setFileName('Оберіть зображення у форматі png, jpeg, webp')
-            
+
         }
     }
 
@@ -86,7 +87,8 @@ const mapDispatchToProps = dispatch => {
     return {
         setInitialImage: file => dispatch(setInitialImage(file)),
         resetRecoveryFilters: () => dispatch(resetRecoveryFilters()),
-        resetColorCorrectionValues: () => dispatch(resetColorCorrectionValues())
+        resetColorCorrectionValues: () => dispatch(resetColorCorrectionValues()),
+        resetActivePreset: () => dispatch(resetActivePreset())
     }
 }
 

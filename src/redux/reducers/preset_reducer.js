@@ -1,4 +1,4 @@
-import { SET_ACTIVE_PRESET } from "../actions/actionTypes";
+import { RESET_ACTIVE_PRESET, SET_ACTIVE_PRESET } from "../actions/actionTypes";
 
 const initialState = {
     activePreset: null,
@@ -36,6 +36,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 activePreset: action.payload
+            }
+        }
+        case RESET_ACTIVE_PRESET: {
+            return {
+                ...state,
+                activePreset: null
             }
         }
         default:
