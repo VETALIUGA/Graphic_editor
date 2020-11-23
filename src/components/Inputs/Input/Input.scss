@@ -1,0 +1,50 @@
+@import "../../../styles/Variables.scss";
+
+.text {
+    &__title {
+            text-transform: uppercase;
+            color: $font-light;
+            margin-right: 20px;
+            flex-basis: 70px;
+    }
+    &__wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    &__value {
+        color: $font-light;
+
+        &-wrap {
+            display: flex;
+            justify-content: flex-end;
+            border-radius: 3px;
+            border: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
+            padding: 5px 10px 4px 10px;
+            transition: border-color 0.1s;
+            &:focus-within {
+                border-color: $background-light;
+            }
+        }
+        &-input {
+            width: 100%;
+            color: $font-light;
+            background-color: transparent;
+            text-align: end;
+            border: none;
+            margin-right: 2px;
+            
+        }
+    }
+    // &__input {
+    //     border: 1px solid rgba($color: $background-light-gray, $alpha: 0.5);
+    //     padding: 5px 10px 4px 10px;
+    //     transition: border-color 0.1s;
+    //     background-color: transparent;
+    //     border-radius: 3px;
+    //     &:focus {
+    //         border-color: $background-light;
+    //     }
+    // }
+}

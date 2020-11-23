@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { connect } from 'react-redux'
-import { setFilterLoading } from '../../redux/actions/actions'
+import { setCropValues, setFilterLoading, setImageParams } from '../../redux/actions/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import './CanvasWindow.scss'
@@ -20,24 +20,26 @@ const CanvasWindow = (props) => {
     const [image, setImage] = useState('')
     const [compressedImage, setCompressedImage] = useState('')
 
-    useEffect(() => {
-        function handleResize() {
-            if (image && location.pathname !== '/crop') {
-                const wrapWidth = sectionRef.current.clientWidth
-                const wrapHeight = sectionRef.current.clientHeight
-                const canvasWidth = wrapRef.current.clientWidth
-                const canvasHeight = wrapRef.current.clientHeight
-                let scaleValue = wrapHeight / canvasHeight
-                if (canvasWidth * scaleValue > wrapWidth) {
-                    scaleValue = wrapWidth / canvasWidth
-                }
-                wrapRef.current.style.transform = `scale(${scaleValue})`
+    function handleResize() {
+        if (image && location.pathname !== '/crop') {
+            const wrapWidth = sectionRef.current.clientWidth
+            const wrapHeight = sectionRef.current.clientHeight
+            const canvasWidth = wrapRef.current.clientWidth
+            const canvasHeight = wrapRef.current.clientHeight
+            let scaleValue = wrapHeight / canvasHeight
+            if (canvasWidth * scaleValue > wrapWidth) {
+                scaleValue = wrapWidth / canvasWidth
             }
-
+            wrapRef.current.style.transform = `scale(${scaleValue})`
         }
+    }
 
+    useEffect(() => {
+        console.log('effect');
         window.addEventListener('resize', handleResize)
-        handleResize()
+        setTimeout(handleResize, 0)
+
+
     }, [image, location])
 
     useMemo(() => {
@@ -45,8 +47,12 @@ const CanvasWindow = (props) => {
         image.src = props.original
         image.onload = () => {
             setImage(image)
-            canvasRef.current.height = image.height
-            canvasRef.current.width = image.width
+            // canvasRef.current.height = image.height
+            // canvasRef.current.width = image.width
+            props.setImageParams({
+                width: image.width,
+                height: image.height
+            })
         }
 
         console.log(blur, props.colorSettings.blur);
@@ -85,8 +91,8 @@ const CanvasWindow = (props) => {
         // } else {
         //     canvasRef.current.classList.remove('canvas__horizontal')
         // }
-        // canvas.height = image.height
-        // canvas.width = image.width
+        canvas.height = image.height
+        canvas.width = image.width
         ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px) hue-rotate(${color}deg)`
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
     }
@@ -130,6 +136,7 @@ const CanvasWindow = (props) => {
         console.log(prepareData.data)
         setCompressedImage(`data:image/png;base64,${prepareData.data.compressImage}`);
     }
+
     return (
         <>
             {
@@ -143,8 +150,8 @@ const CanvasWindow = (props) => {
                             <div className="canvas__wrap" ref={wrapRef}>
                                 <canvas
                                     ref={canvasRef}
-                                    width='1920'
-                                    height='1080'
+                                    // width='1920'
+                                    // height='1080'
                                     className="canvas"
                                     id='canvasOutput'
                                 >
@@ -159,7 +166,7 @@ const CanvasWindow = (props) => {
                     :
                     <section className="section crop__section">
                         <div className="container crop__container">
-                            <ReactCrop src={props.original} crop={crop} onChange={newCrop => setCrop(newCrop)} />
+                            <ReactCrop src={props.original} crop={props.crop} onChange={newCrop => props.setCropValues(newCrop)} />
                         </div>
                     </section>
             }
@@ -171,6 +178,7 @@ const mapStateToProps = state => {
     const { file: { links: { original }, fileName } } = state
     const { recovery: { filters: { median, bilateral }, filters, isLoading } } = state
     const { color: { settingValues } } = state
+    const { crop } = state
     return {
         original,
         median,
@@ -178,13 +186,16 @@ const mapStateToProps = state => {
         isLoading,
         filters,
         fileName,
-        settingValues
+        settingValues,
+        crop
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setFilterLoading: bool => dispatch(setFilterLoading(bool))
+        setFilterLoading: bool => dispatch(setFilterLoading(bool)),
+        setCropValues: crop => dispatch(setCropValues(crop)),
+        setImageParams: params => dispatch(setImageParams(params))
     }
 }
 

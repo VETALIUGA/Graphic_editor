@@ -1,4 +1,4 @@
-import { SET_ACTIVE_PRESET, SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_INITIAL_IMAGE, SET_MEDIAN_FILTER_VALUE, SET_MODIFIED_IMAGE, SET_SATURATION_VALUE, SET_IS_FILTER_LOADING, SET_BILATERAL_FILTER_VALUE, RESET_FILTER_VALUE, SET_NEW_FILENAME, RESET_COLOR_CORRECTION, RESET_ACTIVE_PRESET } from "./actionTypes"
+import { SET_ACTIVE_PRESET, SET_BLUR_VALUE, SET_BRIGHTNESS_VALUE, SET_COLOR_CORRECTION_VALUES, SET_INITIAL_IMAGE, SET_MEDIAN_FILTER_VALUE, SET_MODIFIED_IMAGE, SET_SATURATION_VALUE, SET_IS_FILTER_LOADING, SET_BILATERAL_FILTER_VALUE, RESET_FILTER_VALUE, SET_NEW_FILENAME, RESET_COLOR_CORRECTION, RESET_ACTIVE_PRESET, SET_CROP_VALUES, SET_IMAGE_PARAMS, RESET_CROP_VALUES } from "./actionTypes"
 
 ///////////////////////CANVAS_FILTERS/////////////////////////
 
@@ -59,6 +59,13 @@ export const setNewName = (string) => {
     }
 }
 
+export const setImageParams = (params) => {
+    return {
+        type: SET_IMAGE_PARAMS,
+        payload: params
+    }
+}
+
 ////////////////////////////PRESETS/////////////////////////////
 
 export const setActivePreset = (id) => {
@@ -99,5 +106,19 @@ export const setFilterLoading = (bool) => {
 export const resetRecoveryFilters = () => {
     return {
         type: RESET_FILTER_VALUE
+    }
+}
+
+///////////////////////////CROP////////////////////////
+
+export const setCropValues = (crop) => {
+    return {
+        type: SET_CROP_VALUES,
+        payload: crop
+    }
+}
+export const resetCropValues = () => {
+    return {
+        type: RESET_CROP_VALUES
     }
 }

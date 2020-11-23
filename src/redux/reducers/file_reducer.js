@@ -1,9 +1,13 @@
-import { SET_INITIAL_IMAGE, SET_MODIFIED_IMAGE, SET_NEW_FILENAME } from "../actions/actionTypes";
+import { SET_IMAGE_PARAMS, SET_INITIAL_IMAGE, SET_MODIFIED_IMAGE, SET_NEW_FILENAME } from "../actions/actionTypes";
 
 const initialState = {
     links: {
         original: '',
         modified: ''
+    },
+    params: {
+        width: 0,
+        height: 0
     },
     fileName: 'Edited_image'
 }
@@ -36,6 +40,14 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 fileName: action.payload
+            }
+        }
+        case SET_IMAGE_PARAMS: {
+            return {
+                ...state,
+                params: {
+                    ...action.payload
+                }
             }
         }
         default:
