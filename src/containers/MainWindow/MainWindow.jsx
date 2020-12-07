@@ -15,7 +15,7 @@ import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import CropSettings from '../SettingsSets/CropSettings/CropSettings';
 import RecoverySettings from '../SettingsSets/RecoverySettings/RecoverySettings';
 import UploadSettings from '../SettingsSets/UploadSettings/UploadSettings';
-import { CompressSettings } from '../SettingsSets/CompressSettings/CompressSettings';
+import CompressSettings from '../SettingsSets/CompressSettings/CompressSettings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 

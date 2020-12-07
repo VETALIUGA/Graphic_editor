@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import './ColorSettings.scss'
 
 import InputRange from '../../../components/Inputs/InputRange/InputRange'

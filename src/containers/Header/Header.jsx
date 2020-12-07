@@ -28,12 +28,17 @@ const Header = (props) => {
                     <button className="header__edit-button" onClick={buttonHandler}><FontAwesomeIcon className="icon--xsm" icon={isEdit ? faCheck : faEdit} /></button>
                 </div>
             </div>
-            <div className="header__item">
-                <a href="#" className="header__link link">
+
+            {/* <div className="header__item">
+                <a
+                    className="header__link link"
+                    download={props.fileName}
+                    href={props.link}
+                >
                     <FontAwesomeIcon className="header__link-icon icon--xsm" icon={faFileDownload} />
                     <span className="header__link-text text--md">Зберегти</span>
                 </a>
-            </div>
+            </div> */}
         </header>
     )
 }
@@ -44,8 +49,8 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const mapStateToProps = ({ file: { fileName } }) => {
-    return { fileName }
+const mapStateToProps = ({ file: { fileName, generated: {link} }, }) => {
+    return { fileName, link }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

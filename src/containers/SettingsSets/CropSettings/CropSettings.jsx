@@ -3,7 +3,7 @@ import './CropSettings.scss'
 import ReactCrop from 'react-image-crop'
 import { connect } from 'react-redux'
 import 'react-image-crop/dist/ReactCrop.css'
-import { resetCropValues, setCropValues, setInitialImage } from '../../../redux/actions/actions'
+import { resetCropValues, setCropValues, setInitialImage, setModifiedImage } from '../../../redux/actions/actions'
 import InputRange from '../../../components/Inputs/InputRange/InputRange'
 import Input from '../../../components/Inputs/Input/Input'
 import InputButtons from '../../../components/Inputs/InputButtons/InputButtons'
@@ -69,6 +69,8 @@ const CropSettings = (props) => {
         // As Base64 string
         const base64Image = canvas.toDataURL('image/jpeg');
         props.setInitialImage(base64Image)
+        props.setModifiedImage(base64Image)
+        props.setCropValues({ ...props.crop, width: 0, height: 0})
         return base64Image
 
         // As a blob
@@ -100,7 +102,7 @@ const CropSettings = (props) => {
                 dimension={props.crop.unit}
                 inputHandler={(e) => props.setCropValues({ ...props.crop, height: +e.target.value })}
             />
-            <InputButtons settings={settingsButtons} clickHandler={buttonHandler} />
+            <InputButtons settings={settingsButtons} clickHandler={buttonHandler} disabled={!(props.crop.width || props.crop.height)}/>
             <pre>
                 {JSON.stringify(props.crop, null, 2)}
             </pre>
@@ -119,7 +121,8 @@ const mapDispatchToProps = dispatch => {
     return {
         setCropValues: crop => dispatch(setCropValues(crop)),
         resetCropValues: crop => dispatch(resetCropValues(crop)),
-        setInitialImage: file => dispatch(setInitialImage(file))
+        setInitialImage: file => dispatch(setInitialImage(file)),
+        setModifiedImage: file => dispatch(setModifiedImage(file))
     }
 }
 

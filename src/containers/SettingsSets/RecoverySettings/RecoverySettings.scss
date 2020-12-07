@@ -1,7 +1,25 @@
+@import '../../../styles/Variables.scss';
+
 #canvasOutput {
     width: 100%;
 }
 
 .recovery-settings {
     padding: 20px;
+}
+
+.recovery {
+    &__button {
+        border: none;
+        flex: 1 1 150px;
+        border-radius: 3px;
+        margin: 0 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        &-wrap {
+            margin: 0 -5px;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
 }

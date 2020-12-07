@@ -1,5 +1,6 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Button from './Button'
 import React from 'react'
 import './InputButtons.scss'
 
@@ -13,14 +14,21 @@ const InputButtons = (props) => {
             <div className="input-buttons__wrap">
                 {props.settings.map((item, index) => {
                     return (
-                        <button
-                            disabled={props.isLoading || item.value === props.activeValue}
+                        // <button
+                        //     disabled={props.isLoading || item.value === props.activeValue || props.disabled}
+                        //     key={index} value={item.value}
+                        //     onClick={(e) => props.clickHandler(e.target.value)}
+                        //     className={`input-buttons__button ${item.value === props.activeValue ? ' active' : ''}`}
+                        // >
+                        //     {item.title}
+                        // </button>
+                        <Button
+                            disabled={props.isLoading || item.value === props.activeValue || props.disabled}
                             key={index} value={item.value}
-                            onClick={(e) => props.clickHandler(e.target.value)}
-                            className={`input-buttons__button ${item.value === props.activeValue ? ' active' : ''}`}
-                        >
-                            {item.title}
-                        </button>
+                            onClick={props.clickHandler}
+                            title={item.title}
+                            isActive={item.value === props.activeValue}
+                        />
                     )
                 })}
             </div>

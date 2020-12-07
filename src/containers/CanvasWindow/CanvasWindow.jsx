@@ -1,50 +1,53 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { connect } from 'react-redux'
-import { setCropValues, setFilterLoading, setImageParams } from '../../redux/actions/actions'
+import { setBilateralValue, setCanvasRef, setCropValues, setFilterLoading, setGeneratedLink, setImageParams, setMedianValue, setModifiedImage } from '../../redux/actions/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import './CanvasWindow.scss'
 import { useLocation } from 'react-router-dom'
-import useDebounce from '../../hooks/useDebounce'
 
 const CanvasWindow = (props) => {
-    const [crop, setCrop] = useState();
     const location = useLocation();
     const { blur, brightness, saturation, color } = props.settingValues
     const canvasRef = useRef(null)
     const wrapRef = useRef(null)
     const sectionRef = useRef(null)
-    const [link, setLink] = useState('#')
     const [image, setImage] = useState('')
-    const [compressedImage, setCompressedImage] = useState('')
 
-    function handleResize() {
-        if (image && location.pathname !== '/crop') {
-            const wrapWidth = sectionRef.current.clientWidth
-            const wrapHeight = sectionRef.current.clientHeight
-            const canvasWidth = wrapRef.current.clientWidth
-            const canvasHeight = wrapRef.current.clientHeight
-            let scaleValue = wrapHeight / canvasHeight
-            if (canvasWidth * scaleValue > wrapWidth) {
-                scaleValue = wrapWidth / canvasWidth
-            }
-            wrapRef.current.style.transform = `scale(${scaleValue})`
+    const handleResize = useCallback(() => {
+        const wrapWidth = sectionRef.current.clientWidth
+        const wrapHeight = sectionRef.current.clientHeight
+        const canvasWidth = wrapRef.current.clientWidth
+        const canvasHeight = wrapRef.current.clientHeight
+        let scaleValue = wrapHeight / canvasHeight
+        if (canvasWidth * scaleValue > wrapWidth) {
+            scaleValue = wrapWidth / canvasWidth
         }
-    }
+        wrapRef.current.style.transform = `scale(${scaleValue})`
+    }, [])
+
+
 
     useEffect(() => {
-        console.log('effect');
-        window.addEventListener('resize', handleResize)
-        setTimeout(handleResize, 0)
+        window.addEventListener('resize', handleResize, false)
 
+        if (location.pathname === '/crop') {
+            window.removeEventListener('resize', handleResize, false)
+        } else {
+            setTimeout(handleResize, 0)
+        }
+    }, [image, location.pathname])
 
-    }, [image, location])
+    useEffect(() => {
+        console.log('generate')
+        props.setGeneratedLink(canvasRef.current.toDataURL('image/png', 1))
+    }, [props.isProcessing])
 
     useMemo(() => {
         const image = new Image()
-        image.src = props.original
+        image.src = props.modified || props.original
         image.onload = () => {
             setImage(image)
             // canvasRef.current.height = image.height
@@ -54,22 +57,39 @@ const CanvasWindow = (props) => {
                 height: image.height
             })
         }
-
-        console.log(blur, props.colorSettings.blur);
-    }, [props.original])
+        // console.log(blur, props.colorSettings.blur);
+    }, [props.original, props.modified, props.median, props.bilateral])
 
     useEffect(() => {
-        if (image && +props.median !== 1) {
-            console.log('call median filter');
-            setRecoveryFilters('median')
+        if (image) {
+            if (+props.median !== 1) {
+                console.log('call median filter');
+                setRecoveryFilters('median')
+                props.onSetBilateralValue(0)
+            } else {
+                // const canvas = canvasRef.current
+                // const ctx = canvas.getContext('2d')
+                // setColorFilters(canvas, ctx)
+                props.onSetModifiedImage("")
+            }
         }
+
     }, [props.median])
 
     useEffect(() => {
-        if (image && +props.bilateral !== 0) {
-            console.log('call bilateral filter');
-            setRecoveryFilters('bilateral')
+        if (image) {
+            if (+props.bilateral !== 0) {
+                console.log('call bilateral filter');
+                setRecoveryFilters('bilateral')
+                props.onSetMedianValue(1)
+            } else {
+                // const canvas = canvasRef.current
+                // const ctx = canvas.getContext('2d')
+                // setColorFilters(canvas, ctx)
+                props.onSetModifiedImage("")
+            }
         }
+
     }, [props.bilateral])
 
 
@@ -82,7 +102,6 @@ const CanvasWindow = (props) => {
             }
             return () => ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-
     }, [blur, brightness, saturation, color, image, location])
 
     const setColorFilters = (canvas, ctx) => {
@@ -100,42 +119,48 @@ const CanvasWindow = (props) => {
     const setRecoveryFilters = (option) => {
         const worker = new Worker('./src/static/worker.js')
         const canvas = new OffscreenCanvas(image.width, image.height)
+        canvas.id = 'canvasOffScreen'
         const ctx = canvas.getContext('2d')
         ctx.drawImage(image, 0, 0)
         let imgData = ctx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height)
         console.log(imgData);
         worker.onmessage = (e) => {
             if (e.data) {
-                cv.imshow('canvasOutput', cv.matFromImageData(e.data));
+                // cv.imshow('canvasOutput', cv.matFromImageData(e.data));
+                const ctx = canvasRef.current.getContext('2d')
+                ctx.putImageData(e.data, 0, 0)
+                props.onSetModifiedImage(canvasRef.current.toDataURL('image/jpeg'))
             } else {
                 console.log('щось пішло не так під ча фільтрації')
             }
             props.setFilterLoading(false)
+
         }
 
         worker.postMessage([imgData, option, props.filters])
         props.setFilterLoading(true)
     }
 
-    const downloadHandler = () => {
-        setLink(canvasRef.current.toDataURL('image/png', 1))
-    }
+    // const downloadHandler = () => {
 
-    const sendImageToOptimaizer228 = async () => {
-        const data = { image: canvasRef.current.toDataURL('image/jpeg').replace(/data:image\/jpeg;base64,/, '') };
-        const response = await fetch('https://diploma-backend-compressor.herokuapp.com/api/saveImage', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept"
-            },
-        });
-        const prepareData = await response.json();
-        console.log(prepareData.data)
-        setCompressedImage(`data:image/png;base64,${prepareData.data.compressImage}`);
-    }
+    //     setLink(props.canvasRef.toDataURL('image/png', 1))
+    // }
+
+    // const sendImageToOptimaizer228 = async () => {
+    //     const data = { image: canvasRef.current.toDataURL('image/jpeg').replace(/data:image\/jpeg;base64,/, '') };
+    //     const response = await fetch('https://diploma-backend-compressor.herokuapp.com/api/saveImage', {
+    //         method: 'POST',
+    //         body: JSON.stringify(data),
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Access-Control-Allow-Origin': '*',
+    //             'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept"
+    //         },
+    //     });
+    //     const prepareData = await response.json();
+    //     console.log(prepareData.data)
+    //     setCompressedImage(`data:image/png;base64,${prepareData.data.compressImage}`);
+    // }
 
     return (
         <>
@@ -144,7 +169,11 @@ const CanvasWindow = (props) => {
                     <section className="section canvas__section">
                         <div className="container canvas__container" ref={sectionRef}>
                             {props.isLoading ? <div className="canvas__spinner-wrap">
-                                <FontAwesomeIcon icon={faSpinner} spin className="canvas__spinner icon--md" />
+                                <FontAwesomeIcon
+                                    icon={faSpinner}
+                                    spin
+                                    className="canvas__spinner icon--md"
+                                />
                                 <span className="canvas__spinner-text text--md">Обробка...</span>
                             </div> : null}
                             <div className="canvas__wrap" ref={wrapRef}>
@@ -159,14 +188,24 @@ const CanvasWindow = (props) => {
                             </div>
 
                             {/* <img src={compressedImage} alt="" />
-                <button onClick={sendImageToOptimaizer228}>ыыы</button>
-                <a download={props.fileName} onClick={downloadHandler} href={link} className="link text--md">Завантажити на компік</a> */}
+                            <button onClick={sendImageToOptimaizer228}>Мінімізація</button>
+                            <a
+                                download={props.fileName}
+                                onClick={downloadHandler}
+                                href={link}
+                                className="link text--md">
+                                Завантажити
+                                </a> */}
                         </div>
                     </section>
                     :
                     <section className="section crop__section">
                         <div className="container crop__container">
-                            <ReactCrop src={props.original} crop={props.crop} onChange={newCrop => props.setCropValues(newCrop)} />
+                            <ReactCrop
+                                src={props.modified || props.original}
+                                crop={props.crop}
+                                onChange={newCrop => props.setCropValues(newCrop)}
+                            />
                         </div>
                     </section>
             }
@@ -175,19 +214,21 @@ const CanvasWindow = (props) => {
 }
 
 const mapStateToProps = state => {
-    const { file: { links: { original }, fileName } } = state
+    const { file: { links: { original, modified }, generated: { isProcessing }, fileName } } = state
     const { recovery: { filters: { median, bilateral }, filters, isLoading } } = state
     const { color: { settingValues } } = state
     const { crop } = state
     return {
         original,
+        modified,
         median,
         bilateral,
         isLoading,
         filters,
         fileName,
         settingValues,
-        crop
+        crop,
+        isProcessing
     }
 }
 
@@ -195,8 +236,12 @@ const mapDispatchToProps = dispatch => {
     return {
         setFilterLoading: bool => dispatch(setFilterLoading(bool)),
         setCropValues: crop => dispatch(setCropValues(crop)),
-        setImageParams: params => dispatch(setImageParams(params))
+        setImageParams: params => dispatch(setImageParams(params)),
+        setGeneratedLink: link => dispatch(setGeneratedLink(link)),
+        onSetMedianValue: (value) => dispatch(setMedianValue(value)),
+        onSetBilateralValue: (value) => dispatch(setBilateralValue(value)),
+        onSetModifiedImage: (link) => dispatch(setModifiedImage(link))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CanvasWindow);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(CanvasWindow);

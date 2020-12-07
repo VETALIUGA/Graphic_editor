@@ -1,31 +1,33 @@
 @font-face {
-    font-family: 'Raleway';
-    src: url("../assets/fonts/Raleway-Regular.ttf") format('truetype');
+    font-family: "Raleway";
+    src: url("../assets/fonts/Raleway-Regular.ttf") format("truetype");
     font-weight: 400;
 }
 @font-face {
-    font-family: 'Raleway';
-    src: url("../assets/fonts/Raleway-Medium.ttf") format('truetype');
+    font-family: "Raleway";
+    src: url("../assets/fonts/Raleway-Medium.ttf") format("truetype");
     font-weight: 500;
 }
 @font-face {
-    font-family: 'Raleway';
-    src: url("../assets/fonts/Raleway-SemiBold.ttf") format('truetype');
+    font-family: "Raleway";
+    src: url("../assets/fonts/Raleway-SemiBold.ttf") format("truetype");
     font-weight: 600;
 }
 
-@import './Variables.scss';
+@import "./Variables.scss";
 
 body {
     color: white;
     font-variant-numeric: lining-nums;
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Raleway', sans-serif;
+    font-family: "Raleway", sans-serif;
 }
 
 label {
@@ -39,9 +41,53 @@ input {
     }
 }
 
+ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    color: $font-light;
+    li {
+        margin-bottom: 10px;
+    }
+}
+
 button {
     font-variant-numeric: lining-nums;
     outline: none;
+    color: $font-dark;
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+
+.button {
+    border: none;
+    flex: 1 1 200px;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+    &--danger {
+        background-color: $background-danger !important;
+        &:not(:disabled) {
+            &:hover {
+                background-color: darken($color: $background-danger, $amount: 10) !important;
+            }
+        }
+        &:disabled {
+            background-color: $background-disabled !important;
+        }
+    }
+    &--success {
+        background-color: $background-success !important;
+        &:not(:disabled) {
+            &:hover {
+                background-color: darken($color: $background-success, $amount: 10) !important;
+            }
+        }
+        &:disabled {
+            background-color: $background-disabled !important;
+        }
+    }
 }
 
 .container {
@@ -56,7 +102,7 @@ h1 {
 }
 
 .logo {
-    background-image: url('../assets/icon.png');
+    background-image: url("../assets/icon.png");
     background-size: cover;
     background-position: center;
     height: 250px;
@@ -94,7 +140,6 @@ h1 {
 
 .icon {
     &--lg {
-
     }
     &--md {
         font-size: 30px;
@@ -102,7 +147,7 @@ h1 {
     &--sm {
         font-size: 20px;
     }
-    &--xsm{
+    &--xsm {
         font-size: 14px;
     }
 }
